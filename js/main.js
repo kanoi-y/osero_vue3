@@ -34,29 +34,17 @@ const App = {
       }
 
       if (0 === this.display[i + panel[0] + h][j + panel[1] + v]) {
-        return [];
-      }
-
-      if (undefined === this.display[i + panel[0] + h][j + panel[1] + v]) {
-        return [];
-      }
-      this.checkStright(panel, panel[0] + h, panel[1] + v, i, j);
-    },
-  //  周りの相手の駒を確認する
-    // checkAroundAnti() {
-
-    // },
-    putPanel(i, j) {
-      // この場所に駒があるかどうか
-      const thisPanel = this.display[i][j];
-      if (thisPanel === 1 || thisPanel === 2) {
-        alert("ここにはおけないよ！");
         return;
       }
 
-      // 周りに相手の駒があるかどうか
+      if (undefined === this.display[i + panel[0] + h][j + panel[1] + v]) {
+        return;
+      }
+      this.checkStright(panel, panel[0] + h, panel[1] + v, i, j);
+    },
+    //  周りの相手の駒を確認する
+    checkAroundAnti(i, j) {
       this.antiPanels = [];
-      this.myPanels = [];
 
       for (let h = -1; h < 2; h++) {
         for (let v = -1; v < 2; v++) {
@@ -70,25 +58,77 @@ const App = {
           }
         }
       }
-      // console.log(this.antiPanels);
+    },
+    putPanel(i, j) {
+      // この場所に駒があるかどうか
+      const thisPanel = this.display[i][j];
+      if (thisPanel === 1 || thisPanel === 2) {
+        alert("ここにはおけないよ！");
+        return;
+      }
 
-      // 周囲に相手の駒があるかどうか
+      // 周りに相手の駒があるかどうか
+      this.checkAroundAnti(i, j);
+
       if (this.antiPanels.length === 0) {
         alert("ここにはおけないよ！");
         return;
       }
 
+      // 周りに駒があった場合、その直線上に味方の駒があるかどうか？
+      this.myPanels = [];
       this.antiPanels.forEach((antiPanel) => {
-        this.myPanels.push(
-          this.checkStright(antiPanel, antiPanel[0], antiPanel[1], i, j)
-        );
+        if (
+          this.checkStright(antiPanel, antiPanel[0], antiPanel[1], i, j) !==
+          undefined
+        ) {
+          this.myPanels.push(
+            this.checkStright(antiPanel, antiPanel[0], antiPanel[1], i, j)
+          );
+        }
       });
+
       console.log(this.myPanels);
+      if (this.myPanels.length === 0) {
+        alert("ここにはおけないよ！");
+        return;
+      }
+
+      this.display[i][j] = this.nowPlayer;
+
+      this.myPanels.forEach((myPanel) => {
+        if (Math.abs(myPanel[0] - i) === 0) {
+          const panelDif = Math.abs(myPanel[1] - j);
+          for (let h = 1; h < panelDif; h++) {
+            this.display[i][
+              j + h * (panelDif / (myPanel[1] - j))
+            ] = this.nowPlayer;
+          }
+        }
+
+        if (Math.abs(myPanel[1] - j) === 0) {
+          const panelDif = Math.abs(myPanel[0] - i);
+          for (let h = 1; h < panelDif; h++) {
+            this.display[i + h * (panelDif / (myPanel[0] - i))][
+              j
+            ] = this.nowPlayer;
+          }
+        }
+
+        if (Math.abs(myPanel[0] - i) !== 0 && Math.abs(myPanel[1] - j) !== 0) {
+          const panelDif = Math.abs(myPanel[0] - i);
+          for (let h = 1; h < panelDif; h++) {
+            this.display[i + h * (panelDif / (myPanel[0] - i))][
+              j + h * (panelDif / (myPanel[0] - i))
+            ] = this.nowPlayer;
+          }
+        }
+      });
     },
   },
   computed: {
     display() {
-      if (this.putCount === 0) return this.fields;
+      return this.fields;
     },
   },
 };
