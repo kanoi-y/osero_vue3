@@ -96,34 +96,36 @@ const App = {
 
       this.display[i][j] = this.nowPlayer;
 
-      this.myPanels.forEach((myPanel) => {
-        if (Math.abs(myPanel[0] - i) === 0) {
-          const panelDif = Math.abs(myPanel[1] - j);
-          for (let h = 1; h < panelDif; h++) {
-            this.display[i][
-              j + h * (panelDif / (myPanel[1] - j))
-            ] = this.nowPlayer;
-          }
-        }
+      // this.myPanels.forEach((myPanel) => {
+      //   if (Math.abs(myPanel[0] - i) === 0) {
+      //     const panelDif = Math.abs(myPanel[1] - j);
+      //     for (let h = 1; h < panelDif; h++) {
+      //       this.display[i][
+      //         j + h * (panelDif / (myPanel[1] - j))
+      //       ] = this.nowPlayer;
+      //     }
+      //   }
 
-        if (Math.abs(myPanel[1] - j) === 0) {
-          const panelDif = Math.abs(myPanel[0] - i);
-          for (let h = 1; h < panelDif; h++) {
-            this.display[i + h * (panelDif / (myPanel[0] - i))][
-              j
-            ] = this.nowPlayer;
-          }
-        }
+      //   if (Math.abs(myPanel[1] - j) === 0) {
+      //     const panelDif = Math.abs(myPanel[0] - i);
+      //     for (let h = 1; h < panelDif; h++) {
+      //       this.display[i + h * (panelDif / (myPanel[0] - i))][
+      //         j
+      //       ] = this.nowPlayer;
+      //     }
+      //   }
 
-        if (Math.abs(myPanel[0] - i) !== 0 && Math.abs(myPanel[1] - j) !== 0) {
-          const panelDif = Math.abs(myPanel[0] - i);
-          for (let h = 1; h < panelDif; h++) {
-            this.display[i + h * (panelDif / (myPanel[0] - i))][
-              j + h * (panelDif / (myPanel[0] - i))
-            ] = this.nowPlayer;
-          }
-        }
-      });
+      //   if (Math.abs(myPanel[0] - i) !== 0 && Math.abs(myPanel[1] - j) !== 0) {
+      //     const panelDif = Math.abs(myPanel[0] - i);
+      //     for (let h = 1; h < panelDif; h++) {
+      //       this.display[i + h * (panelDif / (myPanel[0] - i))][
+      //         j + h * (panelDif / (myPanel[0] - i))
+      //       ] = this.nowPlayer;
+      //     }
+      //   }
+
+      // });
+      this.nowPlayer = this.nowPlayer === 2 ? 1 : 2;
     },
   },
   computed: {
